@@ -4,3 +4,4 @@ __pycache__/
 node_modules/
 .next/
 sleeper_data/
+ingest/sleeper_players.json
