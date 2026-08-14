@@ -84,33 +84,57 @@ def get_slates(d, season, week):
     return slates
 
 
+FLEX_ELIGIBLE = ("RB", "WR", "TE")
+
+
+def _best_lineup(slate, slots, metric):
+    """Fill the starting `slots` greedily by `metric`, return the ACTUAL points
+    of the chosen players. Fixed slots take the best of their position; Flex
+    takes the best remaining RB/WR/TE. For standard nested flex this yields the
+    true optimum, so the result is always >= the actual lineup's score.
+    """
+    pools = {}  # pos -> list of (metric_val, actual_val) sorted desc by metric
+    for _, r in slate.iterrows():
+        pools.setdefault(r["Pos"], []).append((r[metric], r["Actual"]))
+    for pos in pools:
+        pools[pos].sort(key=lambda x: x[0], reverse=True)
+
+    total, flex_slots = 0.0, []
+    for slot in slots:
+        if slot == "Flex":
+            flex_slots.append(slot)
+            continue
+        pool = pools.get(slot)  # QB / RB / WR / TE / K / D/ST
+        if pool:
+            total += pool.pop(0)[1]
+    for _ in flex_slots:
+        best_pos, best_val = None, None
+        for pos in FLEX_ELIGIBLE:
+            if pools.get(pos) and (best_val is None or pools[pos][0][0] > best_val):
+                best_pos, best_val = pos, pools[pos][0][0]
+        if best_pos is not None:
+            total += pools[best_pos].pop(0)[1]
+    return total
+
+
 def compute_pts(slates, posns, struc):
-    """actual / optimal / projected-optimal points per team (see notebook)."""
+    """actual / optimal / projection-optimal points per team.
+
+    - apts: points from the lineup actually started
+    - opts: points from the best-possible lineup (chosen by actual points)
+    - epts: points from the lineup the ESPN projections would have set
+    """
+    slots = []
+    for pos, n in zip(posns, struc):
+        slots += [pos] * n
     data = {}
     for tmid, slate in slates.items():
-        pts = {"opts": 0, "epts": 0, "apts": 0}
-        pts["apts"] = slate.query('Slot not in ["Bench", "IR"]').filter(["Actual"]).sum().values[0]
-
-        for method, cat in [("Actual", "opts"), ("Proj", "epts")]:
-            flex_candidates_act = []
-            flex_candidates_proj = []
-            fcp = []
-            num = 0
-            for pos, num in zip(posns, struc):
-                sorted_slate = slate.query("Pos == @pos").sort_values(by=method, ascending=False)
-                pts[cat] += sorted_slate.iloc[:num].filter(["Actual"]).sum().values[0]
-                if pos in ["RB", "WR", "TE"] and len(sorted_slate) > num:
-                    if method == "Proj":
-                        flex_candidates_proj.append(sorted_slate.iloc[num:])
-                    else:
-                        flex_candidates_act.extend(sorted_slate.iloc[num:].filter(["Actual"]).values[:, 0])
-            if flex_candidates_proj:
-                fcp.extend(pd.concat(flex_candidates_proj).sort_values(by="Proj").iloc[num:]
-                           .filter(["Actual"]).values[:, 0])
-                pts[cat] += sum(fcp[-num:])
-            if flex_candidates_act:
-                pts[cat] += sum(sorted(flex_candidates_act, reverse=True)[:num])
-        data[tmid] = {k: round(float(v), 1) for k, v in pts.items()}
+        apts = slate.query('Slot not in ["Bench", "IR"]')["Actual"].sum()
+        data[tmid] = {
+            "apts": round(float(apts), 1),
+            "opts": round(float(_best_lineup(slate, slots, "Actual")), 1),
+            "epts": round(float(_best_lineup(slate, slots, "Proj")), 1),
+        }
     return data
 
 
