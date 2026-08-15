@@ -84,32 +84,40 @@ def get_slates(d, season, week):
     return slates
 
 
-FLEX_ELIGIBLE = ("RB", "WR", "TE")
+# Which positions each starting slot label can be filled by. Derived from the
+# actual lineup, so we never assume a league's roster shape.
+SLOT_ELIGIBLE = {
+    "QB": {"QB"}, "RB": {"RB"}, "WR": {"WR"}, "TE": {"TE"},
+    "K": {"K"}, "D/ST": {"D/ST"},
+    "Flex": {"RB", "WR", "TE"},
+    "OP": {"QB", "RB", "WR", "TE"},          # superflex, if ever used
+}
+BENCH_SLOTS = {"Bench", "IR"}
 
 
 def _best_lineup(slate, slots, metric):
-    """Fill the starting `slots` greedily by `metric`, return the ACTUAL points
-    of the chosen players. Fixed slots take the best of their position; Flex
-    takes the best remaining RB/WR/TE. For standard nested flex this yields the
-    true optimum, so the result is always >= the actual lineup's score.
+    """Optimally fill the given starting `slots` from the whole roster, ranking
+    by `metric`, and return the ACTUAL points of the chosen players. Single-
+    position slots are filled first, then flex-type slots take the best eligible
+    player left. Because the actually-started lineup is one feasible filling of
+    these same slots, the result is always >= the started lineup's score.
     """
-    pools = {}  # pos -> list of (metric_val, actual_val) sorted desc by metric
+    pools = {}  # pos -> [(metric_val, actual_val)] sorted desc by metric
     for _, r in slate.iterrows():
         pools.setdefault(r["Pos"], []).append((r[metric], r["Actual"]))
     for pos in pools:
         pools[pos].sort(key=lambda x: x[0], reverse=True)
 
-    total, flex_slots = 0.0, []
-    for slot in slots:
-        if slot == "Flex":
-            flex_slots.append(slot)
-            continue
-        pool = pools.get(slot)  # QB / RB / WR / TE / K / D/ST
-        if pool:
-            total += pool.pop(0)[1]
-    for _ in flex_slots:
+    singles = [s for s in slots if len(SLOT_ELIGIBLE.get(s, ())) == 1]
+    multis = [s for s in slots if len(SLOT_ELIGIBLE.get(s, ())) > 1]
+    total = 0.0
+    for slot in singles:
+        pos = next(iter(SLOT_ELIGIBLE[slot]))
+        if pools.get(pos):
+            total += pools[pos].pop(0)[1]
+    for slot in multis:
         best_pos, best_val = None, None
-        for pos in FLEX_ELIGIBLE:
+        for pos in SLOT_ELIGIBLE[slot]:
             if pools.get(pos) and (best_val is None or pools[pos][0][0] > best_val):
                 best_pos, best_val = pos, pools[pos][0][0]
         if best_pos is not None:
@@ -117,19 +125,18 @@ def _best_lineup(slate, slots, metric):
     return total
 
 
-def compute_pts(slates, posns, struc):
+def compute_pts(slates, *_ignored):
     """actual / optimal / projection-optimal points per team.
 
-    - apts: points from the lineup actually started
-    - opts: points from the best-possible lineup (chosen by actual points)
-    - epts: points from the lineup the ESPN projections would have set
+    The starting-slot structure is read from each team's actual lineup (the
+    non-bench slots they started), so no roster assumptions are made and optimal
+    is always >= actual. Extra positional args are ignored for back-compat.
     """
-    slots = []
-    for pos, n in zip(posns, struc):
-        slots += [pos] * n
     data = {}
     for tmid, slate in slates.items():
-        apts = slate.query('Slot not in ["Bench", "IR"]')["Actual"].sum()
+        started = slate[~slate["Slot"].isin(BENCH_SLOTS)]
+        apts = started["Actual"].sum()
+        slots = list(started["Slot"])          # the exact slots they started
         data[tmid] = {
             "apts": round(float(apts), 1),
             "opts": round(float(_best_lineup(slate, slots, "Actual")), 1),

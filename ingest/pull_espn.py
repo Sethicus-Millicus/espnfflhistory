@@ -16,7 +16,7 @@ import os
 import sys
 
 from db import ensure_owner, get_client, owner_map, upsert_season
-from espn_api import compute_pts, get_matchups, get_slates, get_view, structure_for
+from espn_api import compute_pts, get_matchups, get_slates, get_view
 
 LEAGUE_ID = os.environ.get("ESPN_LEAGUE_ID", "564698")
 PLATFORM = "espn"
@@ -85,8 +85,7 @@ def pull_year(sb, year, cache):
         else:  # bye
             meta[(wk, h_id)] = (None, None, "W", is_playoff)
 
-    # weekly optimal/expected/actual
-    posns, struc = structure_for(year)
+    # weekly optimal/expected/actual (lineup structure derived per team)
     rows = []
     for week in range(1, 18):
         try:
@@ -96,7 +95,7 @@ def pull_year(sb, year, cache):
             continue
         if not d.get("teams"):
             continue
-        pts = compute_pts(get_slates(d, year, week), posns, struc)
+        pts = compute_pts(get_slates(d, year, week))
         got = False
         for roster_id, p in pts.items():
             rid = str(roster_id)
