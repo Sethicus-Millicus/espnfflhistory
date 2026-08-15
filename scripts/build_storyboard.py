@@ -70,7 +70,7 @@ seasons = [
   ("Jeff Heitzman","2,532"),("Steve Clausing","1,773"),("210.8","Jeff Heitzman","Wk 11"),("Jeff Heitzman","Steve Clausing","+104.6")),
  (2019,"e","Nick Vgts","7–6","Micah Swank","3–10","Nick Vgts sneaks in at 7–6 and captures his first ring.",
   ("Nick Vgts","2,325"),("Kolby Moddelmog","1,665"),("202.6","Nick Vgts","Wk 3"),("Steve Clausing","Kolby Moddelmog","+109.6")),
- (2020,"e","Seth Miller","10–2","Micah Swank","2–11","Seth Miller's 10–2 juggernaut ends in a title.",
+ (2020,"e","Seth Miller","10–2–1","Micah Swank","2–11","Seth Miller's 10–2–1 juggernaut ends in a title.",
   ("Seth Miller","2,684"),("Kolby Moddelmog","1,876"),("221.8","Jeff Heitzman","Wk 12"),("Jeff Heitzman","Alex Clausing","+161.2")),
  (2021,"e","Alex Otte","8–6","Matthew Hermann","3–11","Alex Otte takes the crown.",
   ("Dylan Geissert","2,481"),("Jeff Heitzman","2,075"),("219.6","Alex Otte","Wk 5"),("Matthew Hermann","Jeff Heitzman","+120.8")),
