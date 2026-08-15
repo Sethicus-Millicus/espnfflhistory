@@ -1,273 +1,196 @@
-<title>There Can Only Be ONE</title>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>There Can Only Be ONE</title>
 <style>
-  :root{
-    --bg:#eceef0; --surface:#ffffff; --surface-2:#f4f6f8; --line:#dde1e6;
-    --ink:#161a1f; --muted:#5c6570; --faint:#8a929c;
-    --gold:#a9781a; --gold-fill:#c8952a; --gold-soft:#eadfc4;
-    --steel:#3c6f92; --espn:#b23a3a; --win:#2f8f5b; --loss:#c0554f;
-    --shadow:0 1px 2px rgba(20,24,30,.06),0 8px 24px rgba(20,24,30,.06);
-    color-scheme:light;
-  }
-  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-    --bg:#0f1319; --surface:#161c25; --surface-2:#1b232e; --line:#28323f;
-    --ink:#eef2f6; --muted:#9aa5b1; --faint:#6b7783;
-    --gold:#e6ba4c; --gold-fill:#e0b246; --gold-soft:#3a3016;
-    --steel:#6aa0c4; --espn:#e07a76; --win:#5cbd83; --loss:#d97a72;
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35); color-scheme:dark;
-  }}
-  :root[data-theme="dark"]{
-    --bg:#0f1319; --surface:#161c25; --surface-2:#1b232e; --line:#28323f;
-    --ink:#eef2f6; --muted:#9aa5b1; --faint:#6b7783;
-    --gold:#e6ba4c; --gold-fill:#e0b246; --gold-soft:#3a3016;
-    --steel:#6aa0c4; --espn:#e07a76; --win:#5cbd83; --loss:#d97a72;
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35); color-scheme:dark;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1000px;margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,30px) 80px}
-  .num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
-
-  header.mast{border-bottom:2px solid var(--ink);padding-bottom:20px;position:relative}
-  .eyebrow{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 8px}
-  h1{font-size:clamp(34px,8vw,72px);line-height:.9;letter-spacing:-.03em;margin:0;font-weight:800;text-wrap:balance}
-  .sub{margin:14px 0 0;color:var(--muted);font-size:15px}
-  .sub b{color:var(--ink);font-weight:650}
-  .toggle{position:absolute;top:0;right:0;border:1px solid var(--line);background:var(--surface);color:var(--muted);
-    border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-weight:600}
-  .toggle:hover{color:var(--ink);border-color:var(--faint)}
-  .toggle:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-
-  .sec-label{display:flex;align-items:baseline;gap:12px;margin:52px 0 18px}
-  .sec-label h2{font-size:clamp(15px,2.6vw,20px);letter-spacing:-.01em;margin:0;font-weight:800;white-space:nowrap}
-  .sec-label .rule{height:1px;background:var(--line);flex:1}
-  .sec-label .n{font-size:12px;color:var(--faint);font-weight:700;letter-spacing:.05em}
-  .note{color:var(--muted);font-size:12.5px;margin:10px 2px 0}
-
-  .chapter{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
-    padding:22px clamp(18px,3vw,26px);margin-bottom:16px}
-  .chead{display:flex;gap:16px 20px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
-  .yr{font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1}
-  .plat{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;
-    border-radius:6px;border:1px solid currentColor;vertical-align:middle;margin-left:4px}
-  .plat.e{color:var(--espn)} .plat.s{color:var(--steel)}
-  .headline{margin:0;font-size:clamp(15px,2.3vw,18px);font-weight:600;color:var(--muted);flex:1;min-width:220px;text-wrap:balance}
-  .crown{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 16px}
-  .crown .unit{display:flex;align-items:center;gap:11px}
-  .crown .ic{font-size:24px}
-  .crown .cl{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:700}
-  .crown .cn{font-weight:750;font-size:17px;letter-spacing:-.01em}
-  .crown .cr{font-size:13px;color:var(--muted);font-weight:600}
-  .crown .champ .cn{color:var(--gold)}
-  .chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-  .chip{background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
-  .chip .ck{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;display:block;margin-bottom:4px}
-  .chip .cv{font-weight:700;font-size:14.5px;letter-spacing:-.01em;display:block;line-height:1.25}
-  .chip .cs{font-size:12px;color:var(--muted);display:block;margin-top:1px}
-
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-  ol.rank{list-style:none;margin:0;padding:6px 0}
-  ol.rank li{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line)}
-  ol.rank li:last-child{border-bottom:0}
-  ol.rank li:hover{background:var(--surface-2)}
-  .rk{color:var(--faint);font-weight:800;font-size:14px;text-align:center}
-  .rk.top{color:var(--gold)}
-  .nm{font-weight:650;letter-spacing:-.01em}
-  .ns{font-size:12.5px;color:var(--muted);margin-top:1px}
-  .rv{font-weight:800;font-size:17px;letter-spacing:-.02em;text-align:right}
-  .rv small{font-size:.62em;color:var(--muted);font-weight:600}
-
-  .rivals{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-  .rival{background:var(--surface);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);padding:15px 16px}
-  .rival .who{font-weight:750;font-size:15px;letter-spacing:-.01em}
-  .rival .plays{font-size:12.5px;color:var(--muted);margin-top:3px}
-  .rival .plays b{color:var(--ink);font-weight:700}
-  .rival .foot{display:flex;justify-content:space-between;align-items:baseline;margin-top:11px;gap:10px}
-  .rival .rec{font-weight:800;font-size:16px}
-  .rival .rec .wl-w{color:var(--win)}.rival .rec .wl-l{color:var(--loss)}
-  .rival .tag{font-size:11px;font-weight:700;letter-spacing:.03em;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
-  .rival .tag.lead{color:var(--gold);border-color:var(--gold-fill)}
-  .rival .tag.trail{color:var(--loss)}
-
-  .scroll{overflow-x:auto}
-  table{border-collapse:collapse;width:100%;min-width:660px;font-size:14px}
-  thead th{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:700;
-    text-align:right;padding:13px 10px;border-bottom:1px solid var(--line);background:var(--surface)}
-  thead th.l{text-align:left}
-  tbody td{padding:10px 10px;border-bottom:1px solid var(--line);text-align:right}
-  tbody tr:last-child td{border-bottom:0}
-  tbody tr:hover{background:var(--surface-2)}
-  td.l{text-align:left}
-  .owner{font-weight:700;letter-spacing:-.01em}
-  .wl-w{color:var(--win);font-weight:650}.wl-l{color:var(--loss)}
-  .trophy{color:var(--gold);font-weight:800}
-  .sacko{color:var(--loss);font-weight:700}
-  .dim{color:var(--faint)}
-
-  .closer{margin-top:56px;text-align:center;padding:30px;border:1px dashed var(--line);border-radius:16px}
-  .closer .big{font-size:clamp(22px,4vw,32px);font-weight:800;letter-spacing:-.02em}
-  .closer .small{color:var(--muted);margin-top:8px;font-size:14px}
-  footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;text-align:center}
+:root{--bg:#eceef0;--surface:#fff;--surface-2:#f4f6f8;--line:#dde1e6;--ink:#161a1f;--muted:#5c6570;--faint:#8a929c;
+--gold:#a9781a;--gold-fill:#c8952a;--gold-soft:#eadfc4;--steel:#3c6f92;--espn:#b23a3a;--win:#2f8f5b;--loss:#c0554f;
+--shadow:0 1px 2px rgba(20,24,30,.06),0 8px 24px rgba(20,24,30,.06);color-scheme:light;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1319;--surface:#161c25;--surface-2:#1b232e;
+--line:#28323f;--ink:#eef2f6;--muted:#9aa5b1;--faint:#6b7783;--gold:#e6ba4c;--gold-fill:#e0b246;--gold-soft:#3a3016;
+--steel:#6aa0c4;--espn:#e07a76;--win:#5cbd83;--loss:#d97a72;--shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);color-scheme:dark;}}
+:root[data-theme="dark"]{--bg:#0f1319;--surface:#161c25;--surface-2:#1b232e;--line:#28323f;--ink:#eef2f6;--muted:#9aa5b1;
+--faint:#6b7783;--gold:#e6ba4c;--gold-fill:#e0b246;--gold-soft:#3a3016;--steel:#6aa0c4;--espn:#e07a76;--win:#5cbd83;
+--loss:#d97a72;--shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);color-scheme:dark;}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,30px) 80px}
+.num{font-variant-numeric:tabular-nums}
+header.mast{border-bottom:2px solid var(--ink);padding-bottom:20px;position:relative}
+.eyebrow{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:0 0 8px}
+h1{font-size:clamp(34px,8vw,72px);line-height:.9;letter-spacing:-.03em;margin:0;font-weight:800}
+.sub{margin:14px 0 0;color:var(--muted);font-size:15px}.sub b{color:var(--ink);font-weight:650}
+.toggle{position:absolute;top:0;right:0;border:1px solid var(--line);background:var(--surface);color:var(--muted);
+border-radius:999px;padding:8px 14px;font-size:13px;cursor:pointer;font-weight:600}
+.toggle:hover{color:var(--ink);border-color:var(--faint)}.toggle:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.sec-label{display:flex;align-items:baseline;gap:12px;margin:52px 0 18px}
+.sec-label h2{font-size:clamp(15px,2.6vw,20px);letter-spacing:-.01em;margin:0;font-weight:800;white-space:nowrap}
+.sec-label .rule{height:1px;background:var(--line);flex:1}.sec-label .n{font-size:12px;color:var(--faint);font-weight:700}
+.note{color:var(--muted);font-size:12.5px;margin:10px 2px 0}
+.chapter{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px clamp(18px,3vw,26px);margin-bottom:16px}
+.chead{display:flex;gap:16px 20px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+.yr{font-size:clamp(30px,5vw,44px);font-weight:800;letter-spacing:-.03em;line-height:1}
+.plat{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:6px;border:1px solid currentColor;margin-left:4px}
+.plat.e{color:var(--espn)}.plat.s{color:var(--steel)}
+.headline{margin:0;font-size:clamp(15px,2.3vw,18px);font-weight:600;color:var(--muted);flex:1;min-width:220px}
+.crown{display:flex;gap:22px;flex-wrap:wrap;margin:14px 0 16px}.crown .unit{display:flex;align-items:center;gap:11px}
+.crown .ic{font-size:24px}.crown .cl{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.crown .cn{font-weight:750;font-size:17px}.crown .cr{font-size:13px;color:var(--muted);font-weight:600}.crown .champ .cn{color:var(--gold)}
+.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.chip{background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.chip .ck{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700;display:block;margin-bottom:4px}
+.chip .cv{font-weight:700;font-size:14.5px;display:block;line-height:1.25}.chip .cs{font-size:12px;color:var(--muted);display:block;margin-top:1px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+ol.rank{list-style:none;margin:0;padding:6px 0}
+ol.rank li{display:grid;grid-template-columns:34px 1fr auto;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line)}
+ol.rank li:last-child{border-bottom:0}ol.rank li:hover{background:var(--surface-2)}
+.rk{color:var(--faint);font-weight:800;font-size:14px;text-align:center}.rk.top{color:var(--gold)}
+.nm{font-weight:650}.ns{font-size:12.5px;color:var(--muted);margin-top:1px}
+.rv{font-weight:800;font-size:17px;letter-spacing:-.02em;text-align:right}.rv small{font-size:.62em;color:var(--muted);font-weight:600}
+.rivals{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.rival{background:var(--surface);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);padding:15px 16px}
+.rival .who{font-weight:750;font-size:15px}.rival .plays{font-size:12.5px;color:var(--muted);margin-top:3px}.rival .plays b{color:var(--ink);font-weight:700}
+.rival .foot{display:flex;justify-content:space-between;align-items:baseline;margin-top:11px;gap:10px}
+.rival .rec{font-weight:800;font-size:16px}
+.rival .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.rival .tag.lead{color:var(--gold);border-color:var(--gold-fill)}.rival .tag.trail{color:var(--loss)}
+.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:660px;font-size:14px}
+thead th{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:700;text-align:right;padding:13px 10px;border-bottom:1px solid var(--line);background:var(--surface)}
+thead th.l{text-align:left}tbody td{padding:10px 10px;border-bottom:1px solid var(--line);text-align:right}
+tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--surface-2)}td.l{text-align:left}
+.owner{font-weight:700}.wl-w{color:var(--win);font-weight:650}.wl-l{color:var(--loss)}
+.trophy{color:var(--gold);font-weight:800}.sacko{color:var(--loss);font-weight:700}.dim{color:var(--faint)}
+.closer{margin-top:56px;text-align:center;padding:30px;border:1px dashed var(--line);border-radius:16px}
+.closer .big{font-size:clamp(22px,4vw,32px);font-weight:800;letter-spacing:-.02em}.closer .small{color:var(--muted);margin-top:8px;font-size:14px}
+footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;text-align:center}
 </style>
-
+</head>
+<body>
 <div class="wrap">
-  <header class="mast">
-    <button class="toggle" id="tg" aria-label="Toggle theme">◐ Theme</button>
-    <p class="eyebrow">The Squad · Est. 2018</p>
-    <h1>There Can<br>Only Be ONE</h1>
-    <p class="sub"><b>8 seasons</b> · <b>15 managers</b> · <b>1,340 games</b> — ESPN (2018–24) → Sleeper (2025–)</p>
-  </header>
-
-  <div class="sec-label"><span class="n">01</span><h2>Season by Season</h2><span class="rule"></span></div>
-  <div id="seasons"></div>
-
-  <div class="sec-label"><span class="n">02</span><h2>Best Scoring Seasons</h2><span class="rule"></span></div>
-  <div class="card"><ol class="rank" id="scoring"></ol></div>
-  <p class="note">Regular-season points only.</p>
-
-  <div class="sec-label"><span class="n">03</span><h2>Top 10 Performances</h2><span class="rule"></span></div>
-  <div class="card"><ol class="rank" id="top"></ol></div>
-
-  <div class="sec-label"><span class="n">04</span><h2>Worst 10 Performances</h2><span class="rule"></span></div>
-  <div class="card"><ol class="rank" id="worst"></ol></div>
-  <p class="note">Regular season only — consolation/losers-bracket games excluded.</p>
-
-  <div class="sec-label"><span class="n">05</span><h2>Biggest Blowouts</h2><span class="rule"></span></div>
-  <div class="card"><ol class="rank" id="blow"></ol></div>
-  <p class="note">Point differential in head-to-head games; playoff byes excluded.</p>
-
-  <div class="sec-label"><span class="n">06</span><h2>Points Left on the Bench</h2><span class="rule"></span></div>
-  <div class="card"><ol class="rank" id="bench"></ol></div>
-  <p class="note">Points a manager could have scored with their optimal lineup, minus what they actually started — by season.</p>
-
-  <div class="sec-label"><span class="n">07</span><h2>Every Manager's Rival</h2><span class="rule"></span></div>
-  <div class="rivals" id="rivals"></div>
-  <p class="note">The opponent each manager has faced most, all-time (playoffs included). Record shown from that manager's side.</p>
-
-  <div class="sec-label"><span class="n">08</span><h2>The Managers</h2><span class="rule"></span></div>
-  <div class="card"><div class="scroll"><table class="num"><thead><tr>
-    <th class="l">Manager</th><th>🏆</th><th>Finals Made</th><th>Playoffs</th><th class="l">Record</th>
-    <th>Win %</th><th>PPG</th><th>💩</th>
-  </tr></thead><tbody id="mgr"></tbody></table></div></div>
-  <p class="note">🏆 championships won · Finals Made = title-game appearances · Playoffs = seasons reaching the postseason · 💩 last-place finishes (worst regular-season record).</p>
-
-  <div class="closer">
-    <div class="big">2026 is loading…</div>
-    <div class="small">There can only be ONE.</div>
-  </div>
-  <footer>Built from the league's full ESPN + Sleeper history. Numbers are live from the database.</footer>
+ <header class="mast">
+  <button class="toggle" id="tg" type="button" aria-label="Toggle theme">◐ Theme</button>
+  <p class="eyebrow">The Squad · Est. 2018</p>
+  <h1>There Can<br>Only Be ONE</h1>
+  <p class="sub"><b>8 seasons</b> · <b>15 managers</b> · <b>1,340 games</b> — ESPN (2018–24) → Sleeper (2025–)</p>
+ </header>
+ <div class="sec-label"><span class="n">01</span><h2>Season by Season</h2><span class="rule"></span></div><article class="chapter">
+ <div class="chead"><div class="yr num">2025<span class="plat s">Sleeper</span></div><p class="headline">The Sleeper era opens — Nick Vgts goes 11–3 and wins his second ring.</p></div>
+ <div class="crown">
+  <div class="unit champ"><span class="ic">🏆</span><span><span class="cl">Champion</span><br><span class="cn">Nick Vgts</span> <span class="cr num">11–3</span></span></div>
+  <div class="unit"><span class="ic">💩</span><span><span class="cl">Last Place</span><br><span class="cn">Alex Clausing</span> <span class="cr num">3–11</span></span></div>
+ </div>
+ <div class="chips"><div class="chip"><span class="ck">Most Points</span><span class="cv">Jeff Heitzman</span><span class="cs">1,989 pts</span></div><div class="chip"><span class="ck">Fewest Points</span><span class="cv">Alex Clausing</span><span class="cs">1,677 pts</span></div><div class="chip"><span class="ck">Highest Score</span><span class="cv">211.8</span><span class="cs">Jacob Berkley · Wk 16</span></div><div class="chip"><span class="ck">Biggest Blowout</span><span class="cv">Jacob Berkley +141.8</span><span class="cs">over Micah Swank</span></div></div>
+</article><article class="chapter">
+ <div class="chead"><div class="yr num">2024<span class="plat e">ESPN</span></div><p class="headline">The final ESPN season — Micah Swank rides a league-record 256.7 to the title.</p></div>
+ <div class="crown">
+  <div class="unit champ"><span class="ic">🏆</span><span><span class="cl">Champion</span><br><span class="cn">Micah Swank</span> <span class="cr num">9–5</span></span></div>
+  <div class="unit"><span class="ic">💩</span><span><span class="cl">Last Place</span><br><span class="cn">Jacob Berkley</span> <span class="cr num">4–10</span></span></div>
+ </div>
+ <div class="chips"><div class="chip"><span class="ck">Most Points</span><span class="cv">Nick Vgts</span><span class="cs">2,160 pts</span></div><div class="chip"><span class="ck">Fewest Points</span><span class="cv">Jeff Heitzman</span><span class="cs">1,688 pts</span></div><div class="chip"><span class="ck">Highest Score</span><span class="cv">256.7</span><span class="cs">Micah Swank · Wk 17</span></div><div class="chip"><span class="ck">Biggest Blowout</span><span class="cv">Micah Swank +114.8</span><span class="cs">over Anthony Otte</span></div></div>
+</article><article class="chapter">
+ <div class="chead"><div class="yr num">2023<span class="plat e">ESPN</span></div><p class="headline">Alex Clausing wins it all at 7–7 — while Dylan piled up points without a ring.</p></div>
+ <div class="crown">
+  <div class="unit champ"><span class="ic">🏆</span><span><span class="cl">Champion</span><br><span class="cn">Alex Clausing</span> <span class="cr num">7–7</span></span></div>
+  <div class="unit"><span class="ic">💩</span><span><span class="cl">Last Place</span><br><span class="cn">Kolby Moddelmog</span> <span class="cr num">3–11</span></span></div>
+ </div>
+ <div class="chips"><div class="chip"><span class="ck">Most Points</span><span class="cv">Dylan Geissert</span><span class="cs">2,161 pts</span></div><div class="chip"><span class="ck">Fewest Points</span><span class="cv">Kolby Moddelmog</span><span class="cs">1,562 pts</span></div><div class="chip"><span class="ck">Highest Score</span><span class="cv">238.8</span><span class="cs">Alex Clausing · Wk 4</span></div><div class="chip"><span class="ck">Biggest Blowout</span><span class="cv">Alex Clausing +186.6</span><span class="cs">over Kolby Moddelmog</span></div></div>
+</article><article class="chapter">
+ <div class="chead"><div class="yr num">2022<span class="plat e">ESPN</span></div><p class="headline">A 7–7 Cinderella — Jeff Heitzman breaks through for the title.</p></div>
+ <div class="crown">
+  <div class="unit champ"><span class="ic">🏆</span><span><span class="cl">Champion</span><br><span class="cn">Jeff Heitzman</span> <span class="cr num">7–7</span></span></div>
+  <div class="unit"><span class="ic">💩</span><span><span class="cl">Last Place</span><br><span class="cn">Alex Clausing</span> <span class="cr num">5–9</span></span></div>
+ </div>
+ <div class="chips"><div class="chip"><span class="ck">Most Points</span><span class="cv">Dylan Geissert</span><span class="cs">2,068 pts</span></div><div class="chip"><span class="ck">Fewest Points</span><span class="cv">Alex Otte</span><span class="cs">1,667 pts</span></div><div class="chip"><span class="ck">Highest Score</span><span class="cv">219.6</span><span class="cs">Dylan Geissert · Wk 5</span></div><div class="chip"><span class="ck">Biggest Blowout</span><span class="cv">Dylan Geissert +104.0</span><span class="cs">over Micah Swank</span></div></div>
+</article><article class="chapter">
+ <div class="chead"><div class="yr num">2021<span class="plat e">ESPN</span></div><p class="headline">Alex Otte takes the crown.</p></div>
+ <div class="crown">
+  <div class="unit champ"><span class="ic">🏆</span><span><span class="cl">Champion</span><br><span class="cn">Alex Otte</span> <span class="cr num">8–6</span></span></div>
+  <div class="unit"><span class="ic">💩</span><span><span class="cl">Last Place</span><br><span class="cn">Matthew Hermann</span> <span class="cr num">3–11</span></span></div>
+ </div>
+ <div class="chips"><div class="chip"><span class="ck">Most Points</span><span class="cv">Dylan Geissert</span><span class="cs">2,022 pts</span></div><div class="chip"><span class="ck">Fewest Points</span><span class="cv">Anthony Otte</span><span class="cs">1,751 pts</span></div><div class="chip"><span class="ck">Highest Score</span><span class="cv">219.6</span><span class="cs">Alex Otte · Wk 5</span></div><div class="chip"><span class="ck">Biggest Blowout</span><span class="cv">Matthew Hermann +120.8</span><span class="cs">over Jeff Heitzman</span></div></div>
+</article><article class="chapter">
+ <div class="chead"><div class="yr num">2020<span class="plat e">ESPN</span></div><p class="headline">Seth Miller&#x27;s 10–2 juggernaut ends in a title.</p></div>
+ <div class="crown">
+  <div class="unit champ"><span class="ic">🏆</span><span><span class="cl">Champion</span><br><span class="cn">Seth Miller</span> <span class="cr num">10–2</span></span></div>
+  <div class="unit"><span class="ic">💩</span><span><span class="cl">Last Place</span><br><span class="cn">Micah Swank</span> <span class="cr num">2–11</span></span></div>
+ </div>
+ <div class="chips"><div class="chip"><span class="ck">Most Points</span><span class="cv">Seth Miller</span><span class="cs">2,017 pts</span></div><div class="chip"><span class="ck">Fewest Points</span><span class="cv">Steve Clausing</span><span class="cs">1,388 pts</span></div><div class="chip"><span class="ck">Highest Score</span><span class="cv">221.8</span><span class="cs">Jeff Heitzman · Wk 12</span></div><div class="chip"><span class="ck">Biggest Blowout</span><span class="cv">Jeff Heitzman +161.2</span><span class="cs">over Alex Clausing</span></div></div>
+</article><article class="chapter">
+ <div class="chead"><div class="yr num">2019<span class="plat e">ESPN</span></div><p class="headline">Nick Vgts sneaks in at 7–6 and captures his first ring.</p></div>
+ <div class="crown">
+  <div class="unit champ"><span class="ic">🏆</span><span><span class="cl">Champion</span><br><span class="cn">Nick Vgts</span> <span class="cr num">7–6</span></span></div>
+  <div class="unit"><span class="ic">💩</span><span><span class="cl">Last Place</span><br><span class="cn">Micah Swank</span> <span class="cr num">3–10</span></span></div>
+ </div>
+ <div class="chips"><div class="chip"><span class="ck">Most Points</span><span class="cv">Dustin Geissert</span><span class="cs">1,782 pts</span></div><div class="chip"><span class="ck">Fewest Points</span><span class="cv">Kolby Moddelmog</span><span class="cs">1,196 pts</span></div><div class="chip"><span class="ck">Highest Score</span><span class="cv">202.6</span><span class="cs">Nick Vgts · Wk 3</span></div><div class="chip"><span class="ck">Biggest Blowout</span><span class="cv">Steve Clausing +109.6</span><span class="cs">over Kolby Moddelmog</span></div></div>
+</article><article class="chapter">
+ <div class="chead"><div class="yr num">2018<span class="plat e">ESPN</span></div><p class="headline">Where it began — Dustin Geissert is the inaugural champion.</p></div>
+ <div class="crown">
+  <div class="unit champ"><span class="ic">🏆</span><span><span class="cl">Champion</span><br><span class="cn">Dustin Geissert</span> <span class="cr num">8–5</span></span></div>
+  <div class="unit"><span class="ic">💩</span><span><span class="cl">Last Place</span><br><span class="cn">Seth Miller</span> <span class="cr num">3–10</span></span></div>
+ </div>
+ <div class="chips"><div class="chip"><span class="ck">Most Points</span><span class="cv">Jeff Heitzman</span><span class="cs">1,968 pts</span></div><div class="chip"><span class="ck">Fewest Points</span><span class="cv">Steve Clausing</span><span class="cs">1,411 pts</span></div><div class="chip"><span class="ck">Highest Score</span><span class="cv">210.8</span><span class="cs">Jeff Heitzman · Wk 11</span></div><div class="chip"><span class="ck">Biggest Blowout</span><span class="cv">Jeff Heitzman +104.6</span><span class="cs">over Steve Clausing</span></div></div>
+</article>
+ <div class="sec-label"><span class="n">02</span><h2>Best Scoring Seasons</h2><span class="rule"></span></div><div class="card"><ol class="rank"><li><div class="rk top">1</div><div><div class="nm">Dylan Geissert</div><div class="ns">2023</div></div><div class="rv">2,161</div></li><li><div class="rk top">2</div><div><div class="nm">Nick Vgts</div><div class="ns">2024</div></div><div class="rv">2,160</div></li><li><div class="rk top">3</div><div><div class="nm">Dylan Geissert</div><div class="ns">2022</div></div><div class="rv">2,068</div></li><li><div class="rk">4</div><div><div class="nm">Matthew Hermann</div><div class="ns">2022</div></div><div class="rv">2,039</div></li><li><div class="rk">5</div><div><div class="nm">Dylan Geissert</div><div class="ns">2021</div></div><div class="rv">2,022</div></li><li><div class="rk">6</div><div><div class="nm">Seth Miller</div><div class="ns">2020</div></div><div class="rv">2,017</div></li><li><div class="rk">7</div><div><div class="nm">Jeff Heitzman</div><div class="ns">2025 · Sleeper</div></div><div class="rv">1,989</div></li><li><div class="rk">8</div><div><div class="nm">Alex Otte</div><div class="ns">2021</div></div><div class="rv">1,982</div></li><li><div class="rk">9</div><div><div class="nm">Jeff Heitzman</div><div class="ns">2018</div></div><div class="rv">1,968</div></li><li><div class="rk">10</div><div><div class="nm">Nick Vgts</div><div class="ns">2025 · Sleeper</div></div><div class="rv">1,965</div></li></ol></div><p class="note">Regular-season points only.</p>
+ <div class="sec-label"><span class="n">03</span><h2>Top 10 Performances</h2><span class="rule"></span></div><div class="card"><ol class="rank"><li><div class="rk top">1</div><div><div class="nm">Micah Swank</div><div class="ns">2024 · Wk 17 vs Anthony Otte</div></div><div class="rv">256.7</div></li><li><div class="rk top">2</div><div><div class="nm">Alex Clausing</div><div class="ns">2023 · Wk 4 vs Kolby Moddelmog</div></div><div class="rv">238.8</div></li><li><div class="rk top">3</div><div><div class="nm">Nick Vgts</div><div class="ns">2024 · Wk 14 vs Cade Miller</div></div><div class="rv">231.2</div></li><li><div class="rk">4</div><div><div class="nm">Jeff Heitzman</div><div class="ns">2020 · Wk 12 vs Alex Clausing</div></div><div class="rv">221.8</div></li><li><div class="rk">5</div><div><div class="nm">Alex Clausing</div><div class="ns">2020 · Wk 2 vs Dylan Geissert</div></div><div class="rv">221.5</div></li><li><div class="rk">6</div><div><div class="nm">Dylan Geissert</div><div class="ns">2022 · Wk 5 vs Micah Swank</div></div><div class="rv">219.6</div></li><li><div class="rk">7</div><div><div class="nm">Alex Otte</div><div class="ns">2021 · Wk 5 vs Seth Miller</div></div><div class="rv">219.6</div></li><li><div class="rk">8</div><div><div class="nm">Anthony Otte</div><div class="ns">2024 · Wk 11 vs Nick Vgts</div></div><div class="rv">218.5</div></li><li><div class="rk">9</div><div><div class="nm">Jacob Berkley</div><div class="ns">2025 · Wk 16 vs Micah Swank</div></div><div class="rv">211.8</div></li><li><div class="rk">10</div><div><div class="nm">Seth Miller</div><div class="ns">2020 · Wk 15 vs Alex Clausing</div></div><div class="rv">211.0</div></li></ol></div>
+ <div class="sec-label"><span class="n">04</span><h2>Worst 10 Performances</h2><span class="rule"></span></div><div class="card"><ol class="rank"><li><div class="rk top">1</div><div><div class="nm">Kolby Moddelmog</div><div class="ns">2019 · Wk 5 vs Steve Clausing</div></div><div class="rv">50.0</div></li><li><div class="rk top">2</div><div><div class="nm">Kolby Moddelmog</div><div class="ns">2023 · Wk 4 vs Alex Clausing</div></div><div class="rv">52.2</div></li><li><div class="rk top">3</div><div><div class="nm">Jeff Heitzman</div><div class="ns">2019 · Wk 7 vs Alex Otte</div></div><div class="rv">53.6</div></li><li><div class="rk">4</div><div><div class="nm">Kolby Moddelmog</div><div class="ns">2019 · Wk 6 vs Dylan Geissert</div></div><div class="rv">54.4</div></li><li><div class="rk">5</div><div><div class="nm">Kolby Moddelmog</div><div class="ns">2021 · Wk 10 vs Dylan Geissert</div></div><div class="rv">60.5</div></li><li><div class="rk">6</div><div><div class="nm">Kolby Moddelmog</div><div class="ns">2019 · Wk 10 vs Nick Vgts</div></div><div class="rv">60.5</div></li><li><div class="rk">7</div><div><div class="nm">Alex Clausing</div><div class="ns">2020 · Wk 12 vs Jeff Heitzman</div></div><div class="rv">60.6</div></li><li><div class="rk">8</div><div><div class="nm">Alex Otte</div><div class="ns">2022 · Wk 9 vs Dylan Geissert</div></div><div class="rv">62.9</div></li><li><div class="rk">9</div><div><div class="nm">Anthony Otte</div><div class="ns">2022 · Wk 1 vs Jeff Heitzman</div></div><div class="rv">63.4</div></li><li><div class="rk">10</div><div><div class="nm">Micah Swank</div><div class="ns">2025 · Wk 11 vs Nick Vgts</div></div><div class="rv">64.8</div></li></ol></div><p class="note">Regular season only — consolation/losers-bracket games excluded.</p>
+ <div class="sec-label"><span class="n">05</span><h2>Biggest Blowouts</h2><span class="rule"></span></div><div class="card"><ol class="rank"><li><div class="rk top">1</div><div><div class="nm">Alex Clausing def. Kolby Moddelmog</div><div class="ns">2023 · Wk 4</div></div><div class="rv">+186.6</div></li><li><div class="rk top">2</div><div><div class="nm">Jeff Heitzman def. Alex Clausing</div><div class="ns">2020 · Wk 12</div></div><div class="rv">+161.2</div></li><li><div class="rk top">3</div><div><div class="nm">Jacob Berkley def. Micah Swank</div><div class="ns">2025 · Wk 16</div></div><div class="rv">+141.8</div></li><li><div class="rk">4</div><div><div class="nm">Matthew Hermann def. Jeff Heitzman</div><div class="ns">2021 · Wk 15</div></div><div class="rv">+120.8</div></li><li><div class="rk">5</div><div><div class="nm">Micah Swank def. Anthony Otte</div><div class="ns">2024 · Wk 17</div></div><div class="rv">+114.8</div></li><li><div class="rk">6</div><div><div class="nm">Alex Clausing def. Dylan Geissert</div><div class="ns">2020 · Wk 2</div></div><div class="rv">+114.1</div></li><li><div class="rk">7</div><div><div class="nm">Steve Clausing def. Kolby Moddelmog</div><div class="ns">2019 · Wk 5</div></div><div class="rv">+109.6</div></li><li><div class="rk">8</div><div><div class="nm">Dylan Geissert def. Alex Otte</div><div class="ns">2023 · Wk 17</div></div><div class="rv">+106.6</div></li><li><div class="rk">9</div><div><div class="nm">Jeff Heitzman def. Steve Clausing</div><div class="ns">2018 · Wk 11</div></div><div class="rv">+104.6</div></li><li><div class="rk">10</div><div><div class="nm">Dylan Geissert def. Micah Swank</div><div class="ns">2022 · Wk 5</div></div><div class="rv">+104.0</div></li></ol></div><p class="note">Point differential in head-to-head games; playoff byes excluded.</p>
+ <div class="sec-label"><span class="n">06</span><h2>Points Left on the Bench</h2><span class="rule"></span></div><div class="card"><ol class="rank"><li><div class="rk top">1</div><div><div class="nm">Seth Miller</div><div class="ns">2025 · Sleeper</div></div><div class="rv">538 <small>pts</small></div></li><li><div class="rk top">2</div><div><div class="nm">Nick Vgts</div><div class="ns">2022</div></div><div class="rv">520 <small>pts</small></div></li><li><div class="rk top">3</div><div><div class="nm">Micah Swank</div><div class="ns">2019</div></div><div class="rv">504 <small>pts</small></div></li><li><div class="rk">4</div><div><div class="nm">Alex Clausing</div><div class="ns">2023</div></div><div class="rv">499 <small>pts</small></div></li><li><div class="rk">5</div><div><div class="nm">Dylan Geissert</div><div class="ns">2019</div></div><div class="rv">499 <small>pts</small></div></li><li><div class="rk">6</div><div><div class="nm">Steve Clausing</div><div class="ns">2019</div></div><div class="rv">480 <small>pts</small></div></li><li><div class="rk">7</div><div><div class="nm">Jeff Heitzman</div><div class="ns">2020</div></div><div class="rv">476 <small>pts</small></div></li><li><div class="rk">8</div><div><div class="nm">Nick Vgts</div><div class="ns">2023</div></div><div class="rv">473 <small>pts</small></div></li><li><div class="rk">9</div><div><div class="nm">Steve Clausing</div><div class="ns">2020</div></div><div class="rv">457 <small>pts</small></div></li><li><div class="rk">10</div><div><div class="nm">Jeff Heitzman</div><div class="ns">2023</div></div><div class="rv">453 <small>pts</small></div></li></ol></div><p class="note">Points a manager could have scored with their optimal lineup, minus what they actually started — by season.</p>
+ <div class="sec-label"><span class="n">07</span><h2>Every Manager's Rival</h2><span class="rule"></span></div><div class="rivals"><div class="rival"><div class="who">Nick Vgts</div><div class="plays">most plays <b>Micah Swank</b> · 19 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">14</span>–<span class="wl-l">5</span></span><span class="tag lead">leads</span></div></div><div class="rival"><div class="who">Dylan Geissert</div><div class="plays">most plays <b>Nick Vgts</b> · 18 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">12</span>–<span class="wl-l">6</span></span><span class="tag lead">leads</span></div></div><div class="rival"><div class="who">Jeff Heitzman</div><div class="plays">most plays <b>Alex Clausing</b> · 16 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">10</span>–<span class="wl-l">6</span></span><span class="tag lead">leads</span></div></div><div class="rival"><div class="who">Seth Miller</div><div class="plays">most plays <b>Alex Clausing</b> · 19 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">12</span>–<span class="wl-l">7</span></span><span class="tag lead">leads</span></div></div><div class="rival"><div class="who">Alex Clausing</div><div class="plays">most plays <b>Seth Miller</b> · 21 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">8</span>–<span class="wl-l">13</span></span><span class="tag trail">trails</span></div></div><div class="rival"><div class="who">Alex Otte</div><div class="plays">most plays <b>Micah Swank</b> · 17 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">11</span>–<span class="wl-l">6</span></span><span class="tag lead">leads</span></div></div><div class="rival"><div class="who">Micah Swank</div><div class="plays">most plays <b>Nick Vgts</b> · 19 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">5</span>–<span class="wl-l">14</span></span><span class="tag trail">trails</span></div></div><div class="rival"><div class="who">Kolby Moddelmog</div><div class="plays">most plays <b>Seth Miller</b> · 13 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">8</span>–<span class="wl-l">4</span></span><span class="tag lead">leads</span></div></div><div class="rival"><div class="who">Anthony Otte</div><div class="plays">most plays <b>Jeff Heitzman</b> · 11 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">4</span>–<span class="wl-l">7</span></span><span class="tag trail">trails</span></div></div><div class="rival"><div class="who">Dustin Geissert</div><div class="plays">most plays <b>Nick Vgts</b> · 7 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">3</span>–<span class="wl-l">4</span></span><span class="tag trail">trails</span></div></div><div class="rival"><div class="who">Jacob Berkley</div><div class="plays">most plays <b>Seth Miller</b> · 9 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">5</span>–<span class="wl-l">4</span></span><span class="tag lead">leads</span></div></div><div class="rival"><div class="who">Cade Miller</div><div class="plays">most plays <b>Alex Clausing</b> · 6 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">4</span>–<span class="wl-l">2</span></span><span class="tag lead">leads</span></div></div><div class="rival"><div class="who">Matthew Hermann</div><div class="plays">most plays <b>Jeff Heitzman</b> · 6 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">3</span>–<span class="wl-l">3</span></span><span class="tag">dead even</span></div></div><div class="rival"><div class="who">Steve Clausing</div><div class="plays">most plays <b>Seth Miller</b> · 7 meetings</div>
+ <div class="foot"><span class="rec num"><span class="wl-w">4</span>–<span class="wl-l">3</span></span><span class="tag lead">leads</span></div></div></div><p class="note">The opponent each manager has faced most, all-time (playoffs included). Record from that manager's side.</p>
+ <div class="sec-label"><span class="n">08</span><h2>The Managers</h2><span class="rule"></span></div><div class="card"><div class="scroll"><table class="num"><thead><tr>
+  <th class="l">Manager</th><th>🏆</th><th>Finals Made</th><th>Playoffs</th><th class="l">Record</th><th>Win %</th><th>PPG</th><th>💩</th>
+ </tr></thead><tbody><tr><td class="l owner">Nick Vgts</td><td class="trophy">🏆🏆</td><td>3</td>
+ <td>7<span class="dim">/8</span></td><td class="l"><span class="wl-w">75</span>–<span class="wl-l">58</span>–1</td>
+ <td>56.0</td><td>135.8</td><td><span class="dim">—</span></td></tr><tr><td class="l owner">Dustin Geissert</td><td class="trophy">🏆</td><td>2</td>
+ <td>3<span class="dim">/3</span></td><td class="l"><span class="wl-w">33</span>–<span class="wl-l">15</span></td>
+ <td>68.8</td><td>135.3</td><td><span class="dim">—</span></td></tr><tr><td class="l owner">Jeff Heitzman</td><td class="trophy">🏆</td><td>2</td>
+ <td>6<span class="dim">/8</span></td><td class="l"><span class="wl-w">77</span>–<span class="wl-l">57</span></td>
+ <td>57.5</td><td>130.3</td><td><span class="dim">—</span></td></tr><tr><td class="l owner">Seth Miller</td><td class="trophy">🏆</td><td>1</td>
+ <td>2<span class="dim">/8</span></td><td class="l"><span class="wl-w">63</span>–<span class="wl-l">70</span>–1</td>
+ <td>47.0</td><td>128.1</td><td><span class="sacko">💩</span></td></tr><tr><td class="l owner">Alex Otte</td><td class="trophy">🏆</td><td>1</td>
+ <td>4<span class="dim">/8</span></td><td class="l"><span class="wl-w">63</span>–<span class="wl-l">71</span></td>
+ <td>47.0</td><td>125.9</td><td><span class="dim">—</span></td></tr><tr><td class="l owner">Alex Clausing</td><td class="trophy">🏆</td><td>2</td>
+ <td>5<span class="dim">/8</span></td><td class="l"><span class="wl-w">62</span>–<span class="wl-l">72</span></td>
+ <td>46.3</td><td>128.4</td><td><span class="sacko">💩💩</span></td></tr><tr><td class="l owner">Micah Swank</td><td class="trophy">🏆</td><td>1</td>
+ <td>5<span class="dim">/8</span></td><td class="l"><span class="wl-w">57</span>–<span class="wl-l">77</span></td>
+ <td>42.5</td><td>125.0</td><td><span class="sacko">💩💩</span></td></tr><tr><td class="l owner">Dylan Geissert</td><td class="trophy"><span class="dim">—</span></td><td>1</td>
+ <td>7<span class="dim">/8</span></td><td class="l"><span class="wl-w">83</span>–<span class="wl-l">51</span></td>
+ <td>61.9</td><td>134.8</td><td><span class="dim">—</span></td></tr><tr><td class="l owner">Anthony Otte</td><td class="trophy"><span class="dim">—</span></td><td>1</td>
+ <td>2<span class="dim">/5</span></td><td class="l"><span class="wl-w">40</span>–<span class="wl-l">46</span></td>
+ <td>46.5</td><td>126.9</td><td><span class="dim">—</span></td></tr><tr><td class="l owner">Cade Miller</td><td class="trophy"><span class="dim">—</span></td><td>1</td>
+ <td>2<span class="dim">/2</span></td><td class="l"><span class="wl-w">16</span>–<span class="wl-l">19</span></td>
+ <td>45.7</td><td>132.6</td><td><span class="dim">—</span></td></tr><tr><td class="l owner">Matthew Hermann</td><td class="trophy"><span class="dim">—</span></td><td><span class="dim">0</span></td>
+ <td>1<span class="dim">/2</span></td><td class="l"><span class="wl-w">16</span>–<span class="wl-l">18</span></td>
+ <td>47.1</td><td>135.6</td><td><span class="sacko">💩</span></td></tr><tr><td class="l owner">Jacob Berkley</td><td class="trophy"><span class="dim">—</span></td><td><span class="dim">0</span></td>
+ <td>1<span class="dim">/3</span></td><td class="l"><span class="wl-w">23</span>–<span class="wl-l">29</span></td>
+ <td>44.2</td><td>127.2</td><td><span class="sacko">💩</span></td></tr><tr><td class="l owner">Steve Clausing</td><td class="trophy"><span class="dim">—</span></td><td>1</td>
+ <td>1<span class="dim">/3</span></td><td class="l"><span class="wl-w">22</span>–<span class="wl-l">26</span></td>
+ <td>45.8</td><td>112.9</td><td><span class="dim">—</span></td></tr><tr><td class="l owner">Kolby Moddelmog</td><td class="trophy"><span class="dim">—</span></td><td><span class="dim">0</span></td>
+ <td>2<span class="dim">/6</span></td><td class="l"><span class="wl-w">41</span>–<span class="wl-l">56</span>–2</td>
+ <td>41.4</td><td>116.2</td><td><span class="sacko">💩</span></td></tr></tbody></table></div></div>
+ <p class="note">🏆 championships won · Finals Made = title-game appearances · Playoffs = seasons reaching the postseason · 💩 last-place finishes (worst regular-season record).</p>
+ <div class="closer"><div class="big">2026 is loading…</div><div class="small">There can only be ONE.</div></div>
+ <footer>Built from the league's full ESPN + Sleeper history.</footer>
 </div>
-
 <script>
-const seasons=[
- {y:2018,p:"e",champ:"Dustin Geissert",crec:"8–5",last:"Seth Miller",lrec:"3–10",h:"Where it began — Dustin Geissert is the inaugural champion.",
-  most:["Jeff Heitzman","1,968"],least:["Steve Clausing","1,411"],best:["210.8","Jeff Heitzman","Wk 11"],blow:["Jeff Heitzman","Steve Clausing","+104.6"]},
- {y:2019,p:"e",champ:"Nick Vgts",crec:"7–6",last:"Micah Swank",lrec:"3–10",h:"Nick Vgts sneaks in at 7–6 and captures his first ring.",
-  most:["Dustin Geissert","1,782"],least:["Kolby Moddelmog","1,196"],best:["202.6","Nick Vgts","Wk 3"],blow:["Steve Clausing","Kolby Moddelmog","+109.6"]},
- {y:2020,p:"e",champ:"Seth Miller",crec:"10–2",last:"Micah Swank",lrec:"2–11",h:"Seth Miller's 10–2 juggernaut ends in a title.",
-  most:["Seth Miller","2,017"],least:["Steve Clausing","1,388"],best:["221.8","Jeff Heitzman","Wk 12"],blow:["Jeff Heitzman","Alex Clausing","+161.2"]},
- {y:2021,p:"e",champ:"Alex Otte",crec:"8–6",last:"Matthew Hermann",lrec:"3–11",h:"Alex Otte takes the crown.",
-  most:["Dylan Geissert","2,022"],least:["Anthony Otte","1,751"],best:["219.6","Alex Otte","Wk 5"],blow:["Matthew Hermann","Jeff Heitzman","+120.8"]},
- {y:2022,p:"e",champ:"Jeff Heitzman",crec:"7–7",last:"Alex Clausing",lrec:"5–9",h:"A 7–7 Cinderella — Jeff Heitzman breaks through for the title.",
-  most:["Dylan Geissert","2,068"],least:["Alex Otte","1,667"],best:["219.6","Dylan Geissert","Wk 5"],blow:["Dylan Geissert","Micah Swank","+104.0"]},
- {y:2023,p:"e",champ:"Alex Clausing",crec:"7–7",last:"Kolby Moddelmog",lrec:"3–11",h:"Alex Clausing wins it all at 7–7 — while Dylan piled up points without a ring.",
-  most:["Dylan Geissert","2,161"],least:["Kolby Moddelmog","1,562"],best:["238.8","Alex Clausing","Wk 4"],blow:["Alex Clausing","Kolby Moddelmog","+186.6"]},
- {y:2024,p:"e",champ:"Micah Swank",crec:"9–5",last:"Jacob Berkley",lrec:"4–10",h:"The final ESPN season — Micah Swank rides a league-record 256.7 to the title.",
-  most:["Nick Vgts","2,160"],least:["Jeff Heitzman","1,688"],best:["256.7","Micah Swank","Wk 17"],blow:["Micah Swank","Anthony Otte","+114.8"]},
- {y:2025,p:"s",champ:"Nick Vgts",crec:"11–3",last:"Alex Clausing",lrec:"3–11",h:"The Sleeper era opens — Nick Vgts goes 11–3 and wins his second ring.",
-  most:["Jeff Heitzman","1,989"],least:["Alex Clausing","1,677"],best:["211.8","Jacob Berkley","Wk 16"],blow:["Jacob Berkley","Micah Swank","+141.8"]}
-];
-const ch=(k,v,s)=>`<div class="chip"><span class="ck">${k}</span><span class="cv">${v}</span><span class="cs">${s}</span></div>`;
-document.getElementById('seasons').innerHTML=[...seasons].reverse().map(s=>`
- <article class="chapter">
-   <div class="chead"><div class="yr num">${s.y}<span class="plat ${s.p}">${s.p==='e'?'ESPN':'Sleeper'}</span></div>
-     <p class="headline">${s.h}</p></div>
-   <div class="crown">
-     <div class="unit champ"><span class="ic">🏆</span><span><span class="cl">Champion</span><br>
-       <span class="cn">${s.champ}</span> <span class="cr num">${s.crec}</span></span></div>
-     <div class="unit"><span class="ic">💩</span><span><span class="cl">Last Place</span><br>
-       <span class="cn">${s.last}</span> <span class="cr num">${s.lrec}</span></span></div>
-   </div>
-   <div class="chips">
-     ${ch('Most Points',s.most[0],s.most[1]+' pts')}
-     ${ch('Fewest Points',s.least[0],s.least[1]+' pts')}
-     ${ch('Highest Score',s.best[0],s.best[1]+' · '+s.best[2])}
-     ${ch('Biggest Blowout',s.blow[0]+' '+s.blow[2],'over '+s.blow[1])}
-   </div>
- </article>`).join('');
-
-const list=(el,items)=>document.getElementById(el).innerHTML=items.map((d,i)=>`
- <li><div class="rk ${i<3?'top':''}">${i+1}</div>
-   <div><div class="nm">${d.n}</div><div class="ns">${d.s}</div></div>
-   <div class="rv">${d.v}</div></li>`).join('');
-
-list('scoring',[["Dylan Geissert","2023",2161],["Nick Vgts","2024",2160],["Dylan Geissert","2022",2068],
- ["Matthew Hermann","2022",2039],["Dylan Geissert","2021",2022],["Seth Miller","2020",2017],
- ["Jeff Heitzman","2025 · Sleeper",1989],["Alex Otte","2021",1982],["Jeff Heitzman","2018",1968],["Nick Vgts","2025 · Sleeper",1965]]
- .map(r=>({n:r[0],s:r[1],v:r[2].toLocaleString()})));
-
-list('top',[["Micah Swank","2024 · Wk 17 vs Anthony Otte",256.7],["Alex Clausing","2023 · Wk 4 vs Kolby Moddelmog",238.8],
- ["Nick Vgts","2024 · Wk 14 vs Cade Miller",231.2],["Jeff Heitzman","2020 · Wk 12 vs Alex Clausing",221.8],
- ["Alex Clausing","2020 · Wk 2 vs Dylan Geissert",221.5],["Dylan Geissert","2022 · Wk 5 vs Micah Swank",219.6],
- ["Alex Otte","2021 · Wk 5 vs Seth Miller",219.6],["Anthony Otte","2024 · Wk 11 vs Nick Vgts",218.5],
- ["Jacob Berkley","2025 · Wk 16 vs Micah Swank",211.8],["Seth Miller","2020 · Wk 15 vs Alex Clausing",211.0]]
- .map(r=>({n:r[0],s:r[1],v:r[2].toFixed(1)})));
-
-list('worst',[["Kolby Moddelmog","2019 · Wk 5 vs Steve Clausing",50.0],["Kolby Moddelmog","2023 · Wk 4 vs Alex Clausing",52.2],
- ["Jeff Heitzman","2019 · Wk 7 vs Alex Otte",53.6],["Kolby Moddelmog","2019 · Wk 6 vs Dylan Geissert",54.4],
- ["Kolby Moddelmog","2021 · Wk 10 vs Dylan Geissert",60.5],["Kolby Moddelmog","2019 · Wk 10 vs Nick Vgts",60.5],
- ["Alex Clausing","2020 · Wk 12 vs Jeff Heitzman",60.6],["Alex Otte","2022 · Wk 9 vs Dylan Geissert",62.9],
- ["Anthony Otte","2022 · Wk 1 vs Jeff Heitzman",63.4],["Micah Swank","2025 · Wk 11 vs Nick Vgts",64.8]]
- .map(r=>({n:r[0],s:r[1],v:r[2].toFixed(1)})));
-
-list('blow',[["Alex Clausing def. Kolby Moddelmog","2023 · Wk 4",186.6],["Jeff Heitzman def. Alex Clausing","2020 · Wk 12",161.2],
- ["Jacob Berkley def. Micah Swank","2025 · Wk 16",141.8],["Matthew Hermann def. Jeff Heitzman","2021 · Wk 15",120.8],
- ["Micah Swank def. Anthony Otte","2024 · Wk 17",114.8],["Alex Clausing def. Dylan Geissert","2020 · Wk 2",114.1],
- ["Steve Clausing def. Kolby Moddelmog","2019 · Wk 5",109.6],["Dylan Geissert def. Alex Otte","2023 · Wk 17",106.6],
- ["Jeff Heitzman def. Steve Clausing","2018 · Wk 11",104.6],["Dylan Geissert def. Micah Swank","2022 · Wk 5",104.0]]
- .map(r=>({n:r[0],s:r[1],v:'+'+r[2].toFixed(1)})));
-
-list('bench',[["Seth Miller","2025 · Sleeper",538.2],["Nick Vgts","2022",520.2],["Micah Swank","2019",503.6],
- ["Alex Clausing","2023",499.3],["Dylan Geissert","2019",499.0],["Steve Clausing","2019",479.5],
- ["Jeff Heitzman","2020",475.7],["Nick Vgts","2023",473.2],["Steve Clausing","2020",456.7],["Jeff Heitzman","2023",452.9]]
- .map(r=>({n:r[0],s:r[1],v:r[2].toFixed(0)+' <small>pts</small>'})));
-
-// per-person rival: [owner, rival, meetings, wins, losses]
-const riv=[["Nick Vgts","Micah Swank",19,14,5],["Dylan Geissert","Nick Vgts",18,12,6],["Jeff Heitzman","Alex Clausing",16,10,6],
- ["Seth Miller","Alex Clausing",19,12,7],["Alex Clausing","Seth Miller",21,8,13],["Alex Otte","Micah Swank",17,11,6],
- ["Micah Swank","Nick Vgts",19,5,14],["Kolby Moddelmog","Seth Miller",13,8,4],["Anthony Otte","Jeff Heitzman",11,4,7],
- ["Dustin Geissert","Nick Vgts",7,3,4],["Jacob Berkley","Seth Miller",9,5,4],["Cade Miller","Alex Clausing",6,4,2],
- ["Matthew Hermann","Jeff Heitzman",6,3,3],["Steve Clausing","Seth Miller",7,4,3]];
-document.getElementById('rivals').innerHTML=riv.map(r=>{
-  const[o,ri,g,w,l]=r;
-  const tag = w===l ? '<span class="tag">dead even</span>' :
-    (w>l ? '<span class="tag lead">leads</span>' : '<span class="tag trail">trails</span>');
-  return `<div class="rival"><div class="who">${o}</div>
-    <div class="plays">most plays <b>${ri}</b> · ${g} meetings</div>
-    <div class="foot"><span class="rec num"><span class="wl-w">${w}</span>–<span class="wl-l">${l}</span></span>${tag}</div></div>`;
-}).join('');
-
-// managers: [name,champs,finals,po,seasons,w,l,t,win,ppg,lastPlaces]
-const mgr=[["Nick Vgts",2,3,7,8,75,58,1,56.0,135.8,0],["Dustin Geissert",1,2,3,3,33,15,0,68.8,135.3,0],
- ["Jeff Heitzman",1,2,6,8,77,57,0,57.5,130.3,0],["Seth Miller",1,1,2,8,63,70,1,47.0,128.1,1],
- ["Alex Otte",1,1,4,8,63,71,0,47.0,125.9,0],["Alex Clausing",1,2,5,8,62,72,0,46.3,128.4,2],
- ["Micah Swank",1,1,5,8,57,77,0,42.5,125.0,2],["Dylan Geissert",0,1,7,8,83,51,0,61.9,134.8,0],
- ["Anthony Otte",0,1,2,5,40,46,0,46.5,126.9,0],["Cade Miller",0,1,2,2,16,19,0,45.7,132.6,0],
- ["Matthew Hermann",0,0,1,2,16,18,0,47.1,135.6,1],["Jacob Berkley",0,0,1,3,23,29,0,44.2,127.2,1],
- ["Steve Clausing",0,1,1,3,22,26,0,45.8,112.9,0],["Kolby Moddelmog",0,0,2,6,41,56,2,41.4,116.2,1]];
-document.getElementById('mgr').innerHTML=mgr.map(m=>{
-  const[n,c,fi,po,se,w,l,t,win,ppg,last]=m;
-  return `<tr><td class="l owner">${n}</td>
-   <td class="trophy">${c?'🏆'.repeat(c):'<span class="dim">—</span>'}</td>
-   <td>${fi||'<span class="dim">0</span>'}</td>
-   <td>${po}<span class="dim">/${se}</span></td>
-   <td class="l"><span class="wl-w">${w}</span>–<span class="wl-l">${l}</span>${t?'–'+t:''}</td>
-   <td>${win.toFixed(1)}</td><td>${ppg.toFixed(1)}</td>
-   <td>${last?'<span class="sacko">'+'💩'.repeat(last)+'</span>':'<span class="dim">—</span>'}</td></tr>`;}).join('');
-
-const root=document.documentElement,tg=document.getElementById('tg');
-let mode=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
-tg.onclick=()=>{mode=mode==='dark'?'light':'dark';root.setAttribute('data-theme',mode);};
+(function(){var r=document.documentElement,b=document.getElementById('tg');
+var m=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+b.addEventListener('click',function(){m=m==='dark'?'light':'dark';r.setAttribute('data-theme',m);});})();
 </script>
+</body>
+</html>
