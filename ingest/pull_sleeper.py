@@ -161,8 +161,47 @@ def pull_season(sb, league, players, cache):
         sb.table("team_weeks").upsert(rows[i:i + 500], on_conflict="team_id,week").execute()
     print(f"  team_weeks: {len(rows)}")
 
+    pull_brackets(sb, lid, team_by_roster)
     pull_draft(sb, league, season_id, team_by_roster)
     return league.get("previous_league_id")
+
+
+def pull_brackets(sb, lid, team_by_roster):
+    """Derive final finish + playoff appearance from Sleeper's bracket endpoints.
+    Winners bracket sets ranks 1..K (match placement `p`); losers bracket sets
+    the remaining ranks. p=1 winner is the champion, its loser the runner-up.
+    """
+    wb = get(f"league/{lid}/winners_bracket") or []
+    lb = get(f"league/{lid}/losers_bracket") or []
+    ranks, playoff = {}, set()
+    for mch in wb:
+        for key in ("t1", "t2", "w", "l"):
+            if isinstance(mch.get(key), int):
+                playoff.add(mch[key])
+        p, w, l = mch.get("p"), mch.get("w"), mch.get("l")
+        if p and isinstance(w, int):
+            ranks[w] = p
+            if isinstance(l, int):
+                ranks[l] = p + 1
+    k = len(playoff)
+    for mch in lb:
+        p, w, l = mch.get("p"), mch.get("w"), mch.get("l")
+        if p and isinstance(w, int):
+            ranks.setdefault(w, k + p)
+            if isinstance(l, int):
+                ranks.setdefault(l, k + p + 1)
+    if not wb:
+        return
+    for rid, tid in team_by_roster.items():
+        try:
+            ri = int(rid)
+        except ValueError:
+            continue
+        sb.table("teams").update({
+            "final_rank": ranks.get(ri),
+            "made_playoffs": ri in playoff,
+        }).eq("team_id", tid).execute()
+    print(f"  brackets: {len(playoff)} playoff teams, champion roster {next((r for r,v in ranks.items() if v==1), '?')}")
 
 
 def pull_draft(sb, league, season_id, team_by_roster):

@@ -35,11 +35,12 @@ def pull_year(sb, year, cache):
     team_json = get_view(LEAGUE_ID, year, "mTeam")
     members = {m["id"]: m for m in team_json["members"]}  # id is the SWID
     settings = team_json.get("settings", {})
-    playoff_start = settings.get("scheduleSettings", {}).get("matchupPeriodCount", 14) + 1
+    sched_settings = settings.get("scheduleSettings", {})
+    playoff_teams = sched_settings.get("playoffTeamCount") or 6
     season_id = upsert_season(sb, PLATFORM, LEAGUE_ID, year,
                               settings.get("name") or f"ESPN League {year}", settings)
 
-    # owners + teams
+    # owners + teams (+ final finish, which ESPN provides directly)
     team_rows = []
     for team in team_json["teams"]:
         swid = (team.get("owners") or [None])[0]
@@ -49,11 +50,15 @@ def pull_year(sb, year, cache):
             name = f"{(m.get('firstName') or '').strip()} {(m.get('lastName') or '').strip()}".strip() \
                 or m.get("displayName")
         owner_id = ensure_owner(sb, PLATFORM, swid, name or f"ESPN {swid}", cache) if swid else None
+        final_rank = team.get("rankCalculatedFinal") or None  # 0 = season not final
+        seed = team.get("playoffSeed") or 0
         team_rows.append({
             "season_id": season_id, "owner_id": owner_id,
             "platform_roster_id": str(team["id"]),
             "team_name": (team.get("name") or name),
             "abbr": team.get("abbrev"),
+            "final_rank": final_rank,
+            "made_playoffs": bool(seed) and seed <= playoff_teams,
         })
     sb.table("teams").upsert(team_rows, on_conflict="season_id,platform_roster_id").execute()
     team_by_roster = {
