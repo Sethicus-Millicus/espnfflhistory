@@ -67,25 +67,25 @@ footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:v
 
 seasons = [
  (2018,"e","Dustin Geissert","8–5","Seth Miller","3–10","Where it began — Dustin Geissert is the inaugural champion.",
-  ("Jeff Heitzman","1,968"),("Steve Clausing","1,411"),("210.8","Jeff Heitzman","Wk 11"),("Jeff Heitzman","Steve Clausing","+104.6")),
+  ("Jeff Heitzman","2,532"),("Steve Clausing","1,773"),("210.8","Jeff Heitzman","Wk 11"),("Jeff Heitzman","Steve Clausing","+104.6")),
  (2019,"e","Nick Vgts","7–6","Micah Swank","3–10","Nick Vgts sneaks in at 7–6 and captures his first ring.",
-  ("Dustin Geissert","1,782"),("Kolby Moddelmog","1,196"),("202.6","Nick Vgts","Wk 3"),("Steve Clausing","Kolby Moddelmog","+109.6")),
+  ("Nick Vgts","2,325"),("Kolby Moddelmog","1,665"),("202.6","Nick Vgts","Wk 3"),("Steve Clausing","Kolby Moddelmog","+109.6")),
  (2020,"e","Seth Miller","10–2","Micah Swank","2–11","Seth Miller's 10–2 juggernaut ends in a title.",
-  ("Seth Miller","2,017"),("Steve Clausing","1,388"),("221.8","Jeff Heitzman","Wk 12"),("Jeff Heitzman","Alex Clausing","+161.2")),
+  ("Seth Miller","2,684"),("Kolby Moddelmog","1,876"),("221.8","Jeff Heitzman","Wk 12"),("Jeff Heitzman","Alex Clausing","+161.2")),
  (2021,"e","Alex Otte","8–6","Matthew Hermann","3–11","Alex Otte takes the crown.",
-  ("Dylan Geissert","2,022"),("Anthony Otte","1,751"),("219.6","Alex Otte","Wk 5"),("Matthew Hermann","Jeff Heitzman","+120.8")),
+  ("Dylan Geissert","2,481"),("Jeff Heitzman","2,075"),("219.6","Alex Otte","Wk 5"),("Matthew Hermann","Jeff Heitzman","+120.8")),
  (2022,"e","Jeff Heitzman","7–7","Alex Clausing","5–9","A 7–7 Cinderella — Jeff Heitzman breaks through for the title.",
-  ("Dylan Geissert","2,068"),("Alex Otte","1,667"),("219.6","Dylan Geissert","Wk 5"),("Dylan Geissert","Micah Swank","+104.0")),
+  ("Matthew Hermann","2,439"),("Alex Otte","2,053"),("219.6","Dylan Geissert","Wk 5"),("Dylan Geissert","Micah Swank","+104.0")),
  (2023,"e","Alex Clausing","7–7","Kolby Moddelmog","3–11","Alex Clausing wins it all at 7–7 — while Dylan piled up points without a ring.",
-  ("Dylan Geissert","2,161"),("Kolby Moddelmog","1,562"),("238.8","Alex Clausing","Wk 4"),("Alex Clausing","Kolby Moddelmog","+186.6")),
+  ("Dylan Geissert","2,628"),("Kolby Moddelmog","1,920"),("238.8","Alex Clausing","Wk 4"),("Alex Clausing","Kolby Moddelmog","+186.6")),
  (2024,"e","Micah Swank","9–5","Jacob Berkley","4–10","The final ESPN season — Micah Swank rides a league-record 256.7 to the title.",
-  ("Nick Vgts","2,160"),("Jeff Heitzman","1,688"),("256.7","Micah Swank","Wk 17"),("Micah Swank","Anthony Otte","+114.8")),
+  ("Nick Vgts","2,644"),("Alex Otte","1,998"),("256.7","Micah Swank","Wk 17"),("Micah Swank","Anthony Otte","+114.8")),
  (2025,"s","Nick Vgts","11–3","Alex Clausing","3–11","The Sleeper era opens — Nick Vgts goes 11–3 and wins his second ring.",
-  ("Jeff Heitzman","1,989"),("Alex Clausing","1,677"),("211.8","Jacob Berkley","Wk 16"),("Jacob Berkley","Micah Swank","+141.8")),
+  ("Nick Vgts","2,589"),("Alex Otte","2,041"),("211.8","Jacob Berkley","Wk 16"),("Jacob Berkley","Micah Swank","+141.8")),
 ]
-scoring = [("Dylan Geissert","2023","2,161"),("Nick Vgts","2024","2,160"),("Dylan Geissert","2022","2,068"),
- ("Matthew Hermann","2022","2,039"),("Dylan Geissert","2021","2,022"),("Seth Miller","2020","2,017"),
- ("Jeff Heitzman","2025 · Sleeper","1,989"),("Alex Otte","2021","1,982"),("Jeff Heitzman","2018","1,968"),("Nick Vgts","2025 · Sleeper","1,965")]
+scoring = [("Seth Miller","2020","2,684"),("Nick Vgts","2024","2,644"),("Dylan Geissert","2023","2,628"),
+ ("Nick Vgts","2025 · Sleeper","2,589"),("Alex Clausing","2020","2,574"),("Jeff Heitzman","2018","2,532"),
+ ("Micah Swank","2024","2,521"),("Dylan Geissert","2021","2,481"),("Jeff Heitzman","2025 · Sleeper","2,461"),("Alex Otte","2021","2,450")]
 top = [("Micah Swank","2024 · Wk 17 vs Anthony Otte","256.7"),("Alex Clausing","2023 · Wk 4 vs Kolby Moddelmog","238.8"),
  ("Nick Vgts","2024 · Wk 14 vs Cade Miller","231.2"),("Jeff Heitzman","2020 · Wk 12 vs Alex Clausing","221.8"),
  ("Alex Clausing","2020 · Wk 2 vs Dylan Geissert","221.5"),("Dylan Geissert","2022 · Wk 5 vs Micah Swank","219.6"),
@@ -179,7 +179,7 @@ DOC = f'''<!doctype html>
   <p class="sub"><b>8 seasons</b> · <b>15 managers</b> · <b>1,340 games</b> — ESPN (2018–24) → Sleeper (2025–)</p>
  </header>
  {label("01","Season by Season")}{chapters}
- {label("02","Best Scoring Seasons")}{rank_list(scoring)}<p class="note">Regular-season points only.</p>
+ {label("02","Best Scoring Seasons")}{rank_list(scoring)}<p class="note">Total points scored in a season, including playoffs.</p>
  {label("03","Top 10 Performances")}{rank_list(top)}
  {label("04","Worst 10 Performances")}{rank_list(worst)}<p class="note">Regular season only — consolation/losers-bracket games excluded.</p>
  {label("05","Biggest Blowouts")}{rank_list(blow)}<p class="note">Point differential in head-to-head games; playoff byes excluded.</p>
